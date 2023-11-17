@@ -1,7 +1,21 @@
-const title = document.querySelector("#myHeading");
-title.innerText = "Dan Hatfield";
+const body = document.querySelector("body");
 
-let imgArr = [
+document.getElementById("myHeading").innerHTML = "Dan Hatfield";
+
+const homeButton = document.querySelector("nav ul li");
+homeButton.setAttribute("class", "currentPage");
+
+const testButton = document.getElementById("myTestEvent");
+// testButton.onclick = () => {
+//   console.log("TEST BUTTON CLICKED");
+// };
+testButton.addEventListener("click", () => {
+  console.log("TEST BUTTON CLICKED");
+});
+
+// ^^^^ both equally valid
+
+const imgArray = [
   "./images/view1.jpg",
   "./images/view2.jpg",
   "./images/view3.jpg",
@@ -10,33 +24,52 @@ let imgArr = [
   "./images/view6.jpg",
 ];
 
-let imageContainer = document.getElementById("myImages");
+const imageDisplay = document.getElementById("myImages");
 
-let imageNumber = 0;
-imageContainer.setAttribute("src", imgArr[imageNumber]);
+let imageIndex = 0;
+imageDisplay.setAttribute("src", imgArray[imageIndex]);
 
-imageContainer.onclick = () => {
+setInterval(changeImage, 4000);
+imageDisplay.onclick = () => {
   changeImage();
 };
 
 function changeImage() {
-  imageNumber = (imageNumber + 1) % imgArr.length;
-  imageContainer.setAttribute("src", imgArr[imageNumber]);
+  imageIndex = (imageIndex + 1) % imgArray.length;
+  imageDisplay.setAttribute("src", imgArray[imageIndex]);
 }
 
-setInterval(changeImage, 4000);
+let colourButtons = document.querySelectorAll(".colPicker");
 
-let bg = document.querySelector("body");
-let colorButtons = document.querySelectorAll(".colPicker");
-
-for (let i = 0; i < colorButtons.length; i++) {
-  colorButtons[i].addEventListener("click", chgColor);
+for (let i = 0; i < colourButtons.length; i++) {
+  colourButtons[i].addEventListener("click", changeColour);
 }
 
-function chgColor(e) {
-  let color = e.target.classList[0];
-  if (color == "reset") {
-    color = "white";
+function changeColour(e) {
+  let colour = e.target.classList[0];
+
+  if (colour == "reset") {
+    colour = "white";
   }
-  bg.style = `background-color: ${color}`;
+
+  body.style = `background-color: ${colour}`;
+}
+
+const url = window.location.href;
+const filename = url.split("/").pop();
+
+let navButtons = document.querySelectorAll("nav ul li");
+let navLinks = document.querySelectorAll("nav ul li a");
+let navFiles = [];
+for (let i = 0; i < navLinks.length; i++) {
+  navFiles[i] = navLinks[i].href.split("/").pop();
+}
+
+function setHighlighted() {
+  for (let i = 0; i < navButtons.length; i++) {
+    navButtons[i].removeAttribute("class");
+    if (navFiles[i] == filename) {
+      navButtons[i].setAttribute("class", "currentPage");
+    }
+  }
 }
